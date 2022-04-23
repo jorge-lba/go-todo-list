@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	// "go-todo-list/domain/entity"
 	"log"
@@ -18,7 +19,20 @@ import (
 	model "go-todo-list/storage/gorm"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
+
+func goDotEnvVariable(key string) string {
+
+	// load .env file
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
+}
 
 type CreatedResponse struct {
 	Id      string `json:"id"`
@@ -156,7 +170,9 @@ func HandleRequest() {
 	router.HandleFunc("/{id}/todo/{todoId}/done", DoneToDo).Methods("PATCH")
 	router.HandleFunc("/{id}/todo/{todoId}/undone", UndoneToDo).Methods("PATCH")
 
-	log.Fatal(http.ListenAndServe(":3334", router))
+	PORT := goDotEnvVariable("PORT")
+
+	log.Fatal(http.ListenAndServe(":"+PORT, router))
 }
 
 func main() {
