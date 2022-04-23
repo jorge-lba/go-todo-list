@@ -164,6 +164,9 @@ func UndoneToDo(w http.ResponseWriter, r *http.Request) {
 
 func HandleRequest() {
 	router := mux.NewRouter()
+
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./doc/")))
+
 	router.HandleFunc("/", CreateToToList).Methods("POST")
 	router.HandleFunc("/{id}", GetToToList).Methods("GET")
 	router.HandleFunc("/{id}/todo", IncludeToDo).Methods("POST")
