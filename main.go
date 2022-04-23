@@ -24,8 +24,10 @@ import (
 
 func goDotEnvVariable(key string) string {
 
+	cwd, _ := os.Getwd()
+
 	// load .env file
-	err := godotenv.Load()
+	err := godotenv.Load(cwd + "/.env")
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
@@ -165,7 +167,7 @@ func UndoneToDo(w http.ResponseWriter, r *http.Request) {
 func HandleRequest() {
 	router := mux.NewRouter()
 
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./doc/")))
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./doc/"))).Methods("GET")
 
 	router.HandleFunc("/", CreateToToList).Methods("POST")
 	router.HandleFunc("/{id}", GetToToList).Methods("GET")
