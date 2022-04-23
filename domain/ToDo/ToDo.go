@@ -6,7 +6,7 @@ type ToDo struct {
 	Id          string `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
-	Done        bool   `json:"done"`
+	Done        bool   `json:"done" default:"false"`
 }
 
 func CreateToDo(t ToDo) *ToDo {
@@ -14,7 +14,7 @@ func CreateToDo(t ToDo) *ToDo {
 		Id:          uuid.New().String(),
 		Title:       t.Title,
 		Description: t.Description,
-		Done:        false,
+		Done:        t.Done,
 	}
 }
 

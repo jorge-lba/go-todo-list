@@ -37,6 +37,10 @@ func Create(p Props) Entity {
 		t.id = uuid.New().String()
 	}
 
+	if len(p.Items) == 0 {
+		t.props.Items = make(map[string]*ToDo.ToDo)
+	}
+
 	if p.CreatedAt.IsZero() {
 		t.props.CreatedAt = time.Now().UTC()
 	}
@@ -67,6 +71,10 @@ func (tl *Entity) IncludeItem(i ToDo.ToDo) string {
 
 func (t *Entity) GetItems() map[string]*ToDo.ToDo {
 	return t.props.Items
+}
+
+func (t *Entity) GetItem(id string) *ToDo.ToDo {
+	return t.props.Items[id]
 }
 
 func (t *Entity) DoneToDo(i string) {
