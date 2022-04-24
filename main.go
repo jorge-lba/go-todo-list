@@ -29,7 +29,6 @@ func goDotEnvVariable(key string) string {
 
 	// load .env file
 	err := godotenv.Load(filepath.Join(cwd, ".env"))
-	fmt.Println(filepath.Join(cwd, ".env"))
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
@@ -169,14 +168,13 @@ func UndoneToDo(w http.ResponseWriter, r *http.Request) {
 func HandleRequest() {
 	router := mux.NewRouter()
 
+	router.HandleFunc("/api", CreateToToList).Methods("POST")
+	router.HandleFunc("/api/{id}", GetToToList).Methods("GET")
+	router.HandleFunc("/api/{id}/todo", IncludeToDo).Methods("POST")
+	router.HandleFunc("/api/{id}/todo/{todoId}/done", DoneToDo).Methods("PATCH")
+	router.HandleFunc("/api/{id}/todo/{todoId}/undone", UndoneToDo).Methods("PATCH")
+
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./doc/"))).Methods("GET")
-
-	router.HandleFunc("/", CreateToToList).Methods("POST")
-	router.HandleFunc("/{id}", GetToToList).Methods("GET")
-	router.HandleFunc("/{id}/todo", IncludeToDo).Methods("POST")
-	router.HandleFunc("/{id}/todo/{todoId}/done", DoneToDo).Methods("PATCH")
-	router.HandleFunc("/{id}/todo/{todoId}/undone", UndoneToDo).Methods("PATCH")
-
 	PORT := goDotEnvVariable("PORT")
 
 	log.Fatal(http.ListenAndServe(":"+PORT, router))
