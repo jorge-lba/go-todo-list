@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	// "go-todo-list/domain/entity"
 	"log"
@@ -27,7 +28,8 @@ func goDotEnvVariable(key string) string {
 	cwd, _ := os.Getwd()
 
 	// load .env file
-	err := godotenv.Load(cwd + "/.env")
+	err := godotenv.Load(filepath.Join(cwd, ".env"))
+	fmt.Println(filepath.Join(cwd, ".env"))
 
 	if err != nil {
 		log.Fatalf("Error loading .env file")
